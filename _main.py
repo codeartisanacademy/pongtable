@@ -4,14 +4,17 @@ from paddle import Paddle
 # initialize pygame
 pygame.init()
 
+screen_width = 500
+screen_height = 700
 # create the screen
-screen = pygame.display.set_mode((500,700))
+screen = pygame.display.set_mode((screen_width,screen_height))
 
 clock = pygame.time.Clock() # define the frame per second
 
+
 paddle = Paddle((255,255,255), 100,10)
-paddle.rect.x = 100
-paddle.rect.y = 300
+paddle.rect.x = (screen_width / 2) - (paddle.rect.width/2) # hard coded value we need to avoid this
+paddle.rect.y = screen_height - 100
 
 sprites = pygame.sprite.Group()
 sprites.add(paddle)
@@ -26,6 +29,13 @@ while playing:
         #print(event)
         if event.type == pygame.QUIT:
             playing = False
+    
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        paddle.move_left(5, screen_width)
+    if keys[pygame.K_RIGHT]:
+        paddle.move_right(5, screen_width)
+
     sprites.update()
     sprites.draw(screen)
     # flip function to render the screen

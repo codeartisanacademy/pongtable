@@ -5,14 +5,16 @@ from paddle import Paddle
 pygame.init()
 
 # create the screen
-screen = pygame.display.set_mode((500,700))
+screen_width = 700
+screen_height = 700
+screen = pygame.display.set_mode((screen_width,screen_height))
 
 clock = pygame.time.Clock() # define the frame per second
 
 # create a paddle object from Paddle class
 paddle = Paddle((0,0,0), 100, 10)
-paddle.rect.x = 350 # hard coded value we need to avoid this
-paddle.rect.y = 800
+paddle.rect.x = (screen_width / 2) - (paddle.rect.width/2) # hard coded value we need to avoid this
+paddle.rect.y = screen_height - 100
 
 sprites = pygame.sprite.Group()
 sprites.add(paddle)
@@ -29,6 +31,16 @@ while playing:
         #print(event)
         if event.type == pygame.QUIT:
             playing = False
+        
+    keys = pygame.key.get_pressed()
+       
+    if keys[pygame.K_LEFT]:
+        paddle.move_left(5, 0)
+        
+    if keys[pygame.K_RIGHT]:
+        paddle.move_right(5, screen_width)
+
+    
 
     sprites.update()
     sprites.draw(screen)
