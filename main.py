@@ -1,6 +1,6 @@
 import pygame
 from paddle import Paddle
-
+from ball import Ball
 # initialize pygame
 pygame.init()
 
@@ -16,8 +16,14 @@ paddle = Paddle((0,0,0), 100, 10)
 paddle.rect.x = (screen_width / 2) - (paddle.rect.width/2) # hard coded value we need to avoid this
 paddle.rect.y = screen_height - 100
 
+# create a ball 
+ball = Ball((255,255,255), 10, 10)
+ball.rect.x = (screen_width / 2) - (ball.rect.width/2)
+ball.rect.y = 100
+
 sprites = pygame.sprite.Group()
 sprites.add(paddle)
+sprites.add(ball)
 
 # to indicate that we are playing the game
 playing = True
@@ -40,7 +46,13 @@ while playing:
     if keys[pygame.K_RIGHT]:
         paddle.move_right(5, screen_width)
 
-    
+    # if the ball hit the right wall
+    if ball.rect.x >= screen.get_width():
+        ball.velocity[0] = -ball.velocity[0]
+
+    # if the ball hit the right wall
+    if ball.rect.x <= 0:
+        ball.velocity[0] = -ball.velocity[0]
 
     sprites.update()
     sprites.draw(screen)
