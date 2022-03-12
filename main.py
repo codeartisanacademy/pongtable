@@ -28,6 +28,9 @@ sprites.add(ball)
 # to indicate that we are playing the game
 playing = True
 
+# score variable
+score = 0
+
 while playing:
 
     # fill the screen with color
@@ -46,6 +49,11 @@ while playing:
     if keys[pygame.K_RIGHT]:
         paddle.move_right(5, screen_width)
 
+    # if the ball collides with the paddle
+    if pygame.sprite.collide_mask(ball, paddle):
+        
+        ball.bounce()
+
     # if the ball hit the right wall
     if ball.rect.x >= screen.get_width():
         ball.velocity[0] = -ball.velocity[0]
@@ -54,9 +62,24 @@ while playing:
     if ball.rect.x <= 0:
         ball.velocity[0] = -ball.velocity[0]
 
+    # if the ball hit top wall
+    if ball.rect.y <= 0:
+        score = score + 1
+        print(score)
+        ball.velocity[1] = -ball.velocity[1]
+
+    if ball.rect.y >= screen_height:
+        ball.stop()
+
     sprites.update()
     sprites.draw(screen)
     # flip function to render the screen
+    
+
+    font = pygame.font.Font(None, 60)
+    text = font.render(str(score),1,(255,255,255))
+    screen.blit(text, (350, 10))
+
     pygame.display.flip()
 
     # set the frames per second
